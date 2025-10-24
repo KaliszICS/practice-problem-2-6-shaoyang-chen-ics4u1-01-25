@@ -21,7 +21,7 @@ public class PracticeProblem {
 				stepEvent++;
 				if (array[j] > array[j + 1]) {
 					flag = false;
-					swapEvent++;
+					swapEvent += 3;
 					temp = array[j];
 					array[j] = array[j + 1];
 					array[j + 1] = temp;
@@ -31,7 +31,7 @@ public class PracticeProblem {
 				i = array.length;
 			}
 		}
-		return counter(swapEvent, stepEvent, 3 ,1);
+		return counter(swapEvent, stepEvent, 1 ,1);
 	}
 
 	public static int[] selectionSort(double[] arr) {
@@ -43,16 +43,15 @@ public class PracticeProblem {
 				stepEvent++;
 				if (arr[j] < arr[minIndex]) {
 					minIndex = j;
+					swapEvent++;
 				}
 			}
-			if (minIndex != i) {
-				swapEvent++;
+				swapEvent += 3;
 				double temp = arr[minIndex];
 				arr[minIndex] = arr[i];
 				arr[i] = temp;
-			}
 		}
-		return counter(swapEvent, stepEvent, 3, 1);
+		return counter(swapEvent, stepEvent, 1, 1);
 	}
 
 	public static int[] insertionSort(double[] arr) {
@@ -62,17 +61,12 @@ public class PracticeProblem {
 		for (int i = 1; i < arr.length; i++) {
 			double value = arr[i];
 			int j = i - 1;
-			stepEvent++;
-
-			while (j >= 0) {
+			swapEvent++;
+			while (j >= 0 && value < arr[j]) {
+				arr[j + 1] = arr[j];
+				j = j - 1;
 				stepEvent++;
-				if (arr[j] > value) {
-					arr[j + 1] = arr[j];
-					swapEvent++;
-					j = j - 1;
-				} else {
-					break;
-				}
+				swapEvent++;
 			}
 			arr[j + 1] = value;
 			swapEvent++;
@@ -80,10 +74,10 @@ public class PracticeProblem {
 		return counter(swapEvent, stepEvent, 1, 1);
 	}
 	public static String leastSwaps(double[] givenArr) {
-		return findLeast(givenArr, 1);
+		return findLeast(givenArr, 0);
 	}
 	public static String leastIterations(double[] givenArr){
-		return findLeast(givenArr, 2);
+		return findLeast(givenArr, 1);
 	}
 	public static String findLeast(double[] array1, int function) {
 		double[] bubbleArray = new double[array1.length];
@@ -92,11 +86,11 @@ public class PracticeProblem {
 		}
 		double[] selectionArray = new double[array1.length];
 		for (int i = 0; i < array1.length; i++) {
-			selectionArray[i] = array1[i];
+			selectionArray[i] = bubbleArray[i];
 		}
 		double[] insertionArray = new double[array1.length];
 		for (int i = 0; i < array1.length; i++) {
-			insertionArray[i] = array1[i];
+			insertionArray[i] = selectionArray[i];
 		}
 
 		int[] bubbleResult = bubbleSort(bubbleArray);
@@ -112,17 +106,31 @@ public class PracticeProblem {
 			selectionValue = selectionResult[1];
 			insertionValue = insertionResult[1];
 		}
+		System.out.println(bubbleValue + " " + selectionValue + " " + insertionValue);
 		return findBestAlgorithm(bubbleValue, selectionValue, insertionValue);
 	}
 	public static String findBestAlgorithm(int bubble, int selection, int insertion) {
 		int minValue = Math.min(bubble, Math.min(selection, insertion));
-		boolean bubbleIsMin = (bubble == minValue);
-		boolean selectionIsMin = (selection == minValue);
-		boolean insertionIsMin = (insertion == minValue);
-		if (bubbleIsMin) return "Bubble";
-		if (insertionIsMin) return "Insertion";
-		if (selectionIsMin) return "Selection";
+		String[] algorithms = {"Bubble", "Insertion", "Selection"};
+		int[] values = {bubble, insertion, selection};
+		for (int i = 0; i < algorithms.length; i++) {
+			if (values[i] == minValue) {
+				String temp = algorithms[i];
+				System.out.println(temp);
+				return algorithms[i];
+			}
+		}
 		return "-1";
+
+
+//		int minValue = Math.min(bubble, Math.min(selection, insertion));
+//		boolean bubbleIsMin = (bubble == minValue);
+//		boolean selectionIsMin = (selection == minValue);
+//		boolean insertionIsMin = (insertion == minValue);
+//		if (bubbleIsMin) return "Bubble";
+//		if (insertionIsMin) return "Insertion";
+//		if (selectionIsMin) return "Selection";
+//		return "-1";
 	}
 
 }
